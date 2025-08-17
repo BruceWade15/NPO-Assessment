@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EM Solutions - NPO Strategy Assessment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: #666666;
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header img {
+            max-height: 60px;
+            width: auto;
+        }
+
+        .title {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .intro-section {
+            background-color: #e8e8e8;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .intro-text {
+            color: black;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .question-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .question-section.active {
+            display: block;
+        }
+
+        .question-number {
+            color: #666666;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .slider-container {
+            margin: 30px 0;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #ddd;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            -webkit-appearance: none;
+        }
+
+        .slider:hover {
+            opacity: 1;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #666666;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #666666;
+            cursor: pointer;
+            border: none;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .slider-value {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #666666;
+            margin-top: 15px;
+        }
+
+        .button {
+            background-color: #666666;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #555555;
+        }
+
+        .button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .results-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: none;
+            text-align: center;
+        }
+
+        .results-section.active {
+            display: block;
+        }
+
+        .results-title {
+            font-size: 24px;
+            color: #666666;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .score-display {
+            font-size: 20px;
+            color: #666666;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .results-message {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .contact-button {
+            background-color: #666666;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .contact-button:hover {
+            background-color: #555555;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: #ddd;
+            border-radius: 3px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #666666;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .intro-section, .question-section, .results-section {
+                padding: 20px;
+            }
+
+            .title {
+                font-size: 20px;
+            }
+
+            .intro-text {
+                font-size: 16px;
+            }
+
+            .question-text {
+                font-size: 16px;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .button {
+                width: 100%;
+                padding: 12px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://em-solutions.co.za/wp-content/uploads/2025/03/EMS-Social-Media-Profile-image.png" alt="EM Solutions Logo" onerror="this.style.display='none';">
+        <div class="title">EM Solutions – NPO Strategy Assessment</div>
+    </div>
+
+    <div class="container">
+        <!-- Intro Section -->
+        <div id="intro" class="intro-section">
+            <div class="intro-text">
+                Assess your Non-Profit: Click the BEGIN button to start a 10 question assessment followed by a short report
+            </div>
+            <button class="button" onclick="startAssessment()">BEGIN</button>
+        </div>
+
+        <!-- Question Sections -->
+        <div id="questions-container" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            
+            <!-- Questions will be generated dynamically -->
+        </div>
+
+        <!-- Results Section -->
+        <div id="results" class="results-section">
+            <div class="results-title">What your Score means to your Organisation</div>
+            <div class="score-display" id="score-display"></div>
+            <div class="results-message" id="results-message"></div>
+            <a href="https://em-solutions.co.za/contact-us/" target="_blank" class="contact-button">Contact EM Solutions</a>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            "We have an up-to-date, well communicated and thoroughly integrated guiding document that articulates who we are as an organisation, who we work with and our core values.",
+            "We have a fully understood strategic plan for the next 3-5 years which outlines the key focus areas and objectives for the period, including breakdown of the programmes and activities that will be undertaken to achieve the objectives.",
+            "We have a clearly documented theory of change that is thoroughly understood throughout the organisation and integrated into all programme activities.",
+            "We have organisation-wide practices that ensure programme activities are regularly reviewed, lessons are extracted, and programmes are adapted to incorporate learning and improve impact.",
+            "Our board and management team frequently set aside time for thinking strategically about the sustainability of the organisation.",
+            "We have a clearly documented, pro-active fundraising strategy that involves the whole team.",
+            "Our organisational structure and future recruitment plans aligns with our organisational strategy.",
+            "Our business model and financial model is the most appropriate model for our type of organisation.",
+            "We have a clearly documented plan to achieve sustainability and build reserves that remains a focus for the organisation.",
+            "Appropriate income generation activities are an integral part of our sustainability strategy."
+        ];
+
+        const sliderLabels = ["No Clue", "Maybe", "Sort of", "Yes", "Got This"];
+        
+        let currentQuestion = 0;
+        let scores = new Array(questions.length).fill(3); // Default to 3 (Sort of)
+        let totalScore = 0;
+
+        function startAssessment() {
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('questions-container').style.display = 'block';
+            generateQuestions();
+            showQuestion(0);
+        }
+
+        function generateQuestions() {
+            const container = document.getElementById('questions-container');
+            
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-section';
+                questionDiv.id = `question-${index}`;
+                
+                questionDiv.innerHTML = `
+                    <div class="question-number">Question ${index + 1} of ${questions.length}</div>
+                    <div class="question-text">${question}</div>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="5" value="3" class="slider" id="slider-${index}" oninput="updateSliderValue(${index})">
+                        <div class="slider-labels">
+                            <span>No Clue</span>
+                            <span>Maybe</span>
+                            <span>Sort of</span>
+                            <span>Yes</span>
+                            <span>Got This</span>
+                        </div>
+                        <div class="slider-value" id="value-${index}">Sort of</div>
+                    </div>
+                    <div class="navigation">
+                        <button class="button" onclick="previousQuestion()" ${index === 0 ? 'style="visibility: hidden;"' : ''}>Previous</button>
+                        <button class="button" onclick="${index === questions.length - 1 ? 'showResults()' : 'nextQuestion()'}">
+                            ${index === questions.length - 1 ? 'SCORE ME' : 'Next'}
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function showQuestion(index) {
+            // Hide all questions
+            document.querySelectorAll('.question-section').forEach(q => q.classList.remove('active'));
+            
+            // Show current question
+            document.getElementById(`question-${index}`).classList.add('active');
+            
+            // Update progress bar
+            const progress = ((index + 1) / questions.length) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+            
+            currentQuestion = index;
+        }
+
+        function updateSliderValue(index) {
+            const slider = document.getElementById(`slider-${index}`);
+            const valueDisplay = document.getElementById(`value-${index}`);
+            const value = parseInt(slider.value);
+            
+            scores[index] = value;
+            valueDisplay.textContent = sliderLabels[value - 1];
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                showQuestion(currentQuestion + 1);
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                showQuestion(currentQuestion - 1);
+            }
+        }
+
+        function calculateTotalScore() {
+            return scores.reduce((sum, score) => sum + score, 0);
+        }
+
+        function getResultMessage(score) {
+            if (score >= 10 && score <= 21) {
+                return "OH DEAR! You are passionate about your cause, but you are not entirely clear on who you are and why what you do works. You are going from day to day fighting fires without considering the long-term. Chances are good that you are just about breaking even each year without doing any of the organisation building things you dream about. You need to make the time to do the deep thinking and writing to gain crystal clarity on who you want your organisation to be so that you can inspire others.";
+            } else if (score >= 22 && score <= 40) {
+                return "ROCKY ROAD You have a clear idea of who you are and what you do, although your board and your team may not be completely on the same page as you. Your organisation has a plan of action that you refer to occasionally to make sure you are on the right track. The organisation has done some thinking around strategic issues but it is not nicely documented, accessible and frequently referenced. Your organisation is probably financially sound for this year with some funding for next year. You still feel like you are fighting fires however, you have put some structures in place to reflect, review and plan. Your organisation's challenge is to rise above the detail and the short-term and agree long-term over-arching strategies that guide the organisation's actions into a sustainable future.";
+            } else if (score >= 41 && score <= 50) {
+                return "SUPER STAR Your organisation is a super star who has it all together. You have well thought out strategies for the growth and sustainability of your organisation. Your board and your team are on the same page and pulling towards a shared vision. Thinking, values and strategies are well documented so there is no ambiguity and you are able to share them with stakeholders outside the organisation in order to inspire passion and partnerships. You have a clear vision and a clear plan to achieve it. Your organisation is going places and earning the respect of others. Sure, there might be a few things you could tweak, but you are sorted.";
+            }
+            return "";
+        }
+
+        function showResults() {
+            totalScore = calculateTotalScore();
+            
+            document.getElementById('questions-container').style.display = 'none';
+            document.getElementById('results').classList.add('active');
+            
+            document.getElementById('score-display').textContent = `Your Score: ${totalScore} out of 50`;
+            document.getElementById('results-message').textContent = getResultMessage(totalScore);
+        }
+    </script>
+</body>
+</html>
